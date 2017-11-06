@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" href="slaves.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-startup-image" href="img/w2m.jpg">
+    <link rel="shortcut icon" type="image/png" href="img/w2m.jpg">
+    <title>Where2Meet</title>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+  <script src="http://jvandemo.github.io/angularjs-google-maps/dist/angularjs-google-maps.js"></script>
+  <script src="src/mainController.js"></script>
+</head>
+<body ng-app="Where2Meet" ng-cloak>
+  <div class="height-100 all-body" ng-controller="mainCtrl"  flex layout="column">
+    <h2>Where2Meet</h2>
+
+    <h3>Enter two locations:</h3>
+   <input type="text" gm-places-autocomplete ng-model="autocomplete1" style="width: 300px;"/>
+   <input type="text" gm-places-autocomplete ng-model="autocomplete2" style="width: 300px;"/>
+
+   <h3>Results:</h3>
+    <ul>
+      <li>Lat: {{ lat }}</li>
+      <li>Lng: {{ lng }}</li>
+    </ul>
+
+    </div>
+</div>
+
+</body>
+</html>

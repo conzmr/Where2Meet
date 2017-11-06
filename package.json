@@ -1,0 +1,27 @@
+{
+  "name": "where2meet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/conzmr/Where2Meet.git"
+  },
+  "author": "Constanza Madrigal Reyes",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.1",
+    "http": "0.0.0",
+    "material-design-icons": "^3.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "bugs": {
+    "url": "https://github.com/conzmr/Where2Meet/issues"
+  },
+  "homepage": "https://github.com/conzmr/Where2Meet#readme"
+}
