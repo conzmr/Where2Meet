@@ -1,25 +1,94 @@
 var app = angular.module('Where2Meet', ['ngMaterial', 'gm']);
 
-app.controller('mainCtrl', function($scope, $mdToast, $mdDialog, $location, $window) {
+app.service('Map', function($q) {
 
-  $scope.$on('gmPlacesAutocomplete::placeChanged', function(){
-       var location = $scope.autocomplete1.getPlace().geometry.location;
-       $scope.lat = location.lat();
-       $scope.lng = location.lng();
-       $scope.$apply();
-   });
+  this.markers=[];
+  var counter = 0;
 
-   $scope.map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 51.503186, lng: -0.126446 },
-            zoom: 15
+    this.init = function() {
+        var options = {
+            center: new google.maps.LatLng(40.7127837, -74.00594130000002),
+            zoom: 13,
+            disableDefaultUI: true
+        }
+        this.map = new google.maps.Map(
+            document.getElementById("map"), options
+        );
+        this.places = new google.maps.places.PlacesService(this.map);
+    }
+
+    this.search = function(str) {
+        var d = $q.defer();
+        this.places.textSearch({query: str}, function(results, status) {
+          console.log(results);
+            if (status == 'OK') {
+                d.resolve(results[0]);
+            }
+            else d.reject(status);
         });
+        return d.promise;
+    }
 
-        $scope.infoWindow = new google.maps.InfoWindow();
-        $scope.service = new google.maps.places.PlacesService($scope.map);
+    this.addMarker = function(res) {
+        if(this.markers[counter%2]) this.markers[counter%2].setMap(null);
+        this.markers[counter%2] = new google.maps.Marker({
+            map: this.map,
+            position: res.geometry.location,
+            animation: google.maps.Animation.DROP
+        });
+        this.map.setCenter(res.geometry.location);
+        counter++;
+    }
 
+});
 
-$scope.cancel = function() {
- $mdDialog.cancel();
-};
+app.controller('mainCtrl', function($scope, Map) {
+
+  $scope.place = {};
+  $scope.place2 = {};
+
+$scope.search = function(location) {
+    $scope.apiError = false;
+
+    switch (location) {
+      case $scope.locationTwo:
+      Map.search($scope.locationTwo)
+      .then(
+          function(res) { // success
+              Map.addMarker(res);
+              $scope.place2.name = res.name;
+              $scope.place2.lat = res.geometry.location.lat();
+              $scope.place2.lng = res.geometry.location.lng();
+          },
+          function(status) { // error
+              $scope.apiError = true;
+              $scope.apiStatus = status;
+          }
+      );
+        break;
+      default:
+      Map.search($scope.locationOne)
+      .then(
+          function(res) { // success
+              Map.addMarker(res);
+              $scope.place.name = res.name;
+              $scope.place.lat = res.geometry.location.lat();
+              $scope.place.lng = res.geometry.location.lng();
+          },
+          function(status) { // error
+              $scope.apiError = true;
+              $scope.apiStatus = status;
+          }
+      );
+      break;
+
+    }
+}
+
+$scope.send = function() {
+    alert($scope.place.name + ' : ' + $scope.place.lat + ', ' + $scope.place.lng);
+}
+
+Map.init();
 
 });

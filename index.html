@@ -9,29 +9,118 @@
     <link rel="shortcut icon" type="image/png" href="img/w2m.jpg">
     <title>Where2Meet</title>
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+  <link href="src/styles.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgGMmMMK4kdUsLnKp0McDlwlBU1sD_sL4&libraries=places"></script>
   <script src="http://jvandemo.github.io/angularjs-google-maps/dist/angularjs-google-maps.js"></script>
   <script src="src/mainController.js"></script>
 </head>
 <body ng-app="Where2Meet" ng-cloak>
-  <div class="height-100 all-body" ng-controller="mainCtrl"  flex layout="column">
+  <div  class="container"  ng-controller="mainCtrl" >
     <h2>Where2Meet</h2>
 
-    <h3>Enter two locations:</h3>
-   <input type="text" gm-places-autocomplete ng-model="autocomplete1" style="width: 300px;"/>
-   <input type="text" gm-places-autocomplete ng-model="autocomplete2" style="width: 300px;"/>
+    <h3 class="clearfix">
+        <img class="pull-left" src="img/w2m.jpg"/>
+        <img class="pull-right" src="http://upload.wikimedia.org/wikipedia/commons/9/9a/Google_maps_logo.png"/>
+    </h3>
 
-   <h3>Results:</h3>
-    <ul>
-      <li>Lat: {{ lat }}</li>
-      <li>Lng: {{ lng }}</li>
-    </ul>
+    <div class="alert alert-danger text-center" role="alert" ng-show="apiError">
+        <b>API Error : </b>
+        <span>{{ apiStatus }}</span>
+    </div>
+
+    <form name="searchForm" novalidate
+    ng-submit="search(locationOne)">
+        <div class="input-group">
+            <input name="place" type="text" class="form-control"
+            ng-model="locationOne" required autofocus />
+            <span class="input-group-btn">
+                <button class="btn btn-primary"
+                ng-disabled="searchForm.$invalid">Search</button>
+            </span>
+        </div>
+    </form>
+
+    <form name="searchForm2" novalidate
+    ng-submit="search(locationTwo)">
+        <div class="input-group">
+            <input name="place2" type="text" class="form-control"
+            ng-model="locationTwo" required autofocus />
+            <span class="input-group-btn">
+                <button class="btn btn-primary"
+                ng-disabled="searchForm2.$invalid">Search</button>
+            </span>
+        </div>
+    </form>
+
+    <div id="map"></div>
+
+    <form name="resForm" class="form-horizontal" novalidate
+    ng-submit="send()">
+        <div class="form-group">
+            <label for="resName" class="col-xs-2 control-label">Name</label>
+            <div class="col-xs-10">
+                <input name="resName" type="text" class="form-control"
+                ng-model="place.name" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="resLat" class="col-xs-2 control-label">Latitude</label>
+            <div class="col-xs-10">
+                <input name="resLat" type="number" class="form-control"
+                ng-model="place.lat" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="resLng" class="col-xs-2 control-label">Longitude</label>
+            <div class="col-xs-10">
+                <input name="resLng" type="number" class="form-control"
+                ng-model="place.lng" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-offset-2 col-xs-10">
+                <button class="btn btn-success"
+                ng-disabled="resForm.$invalid">Confirm</button>
+            </div>
+        </div>
+    </form>
+
+    <form name="resForm" class="form-horizontal" novalidate
+    ng-submit="send()">
+        <div class="form-group">
+            <label for="resName" class="col-xs-2 control-label">Name</label>
+            <div class="col-xs-10">
+                <input name="resName" type="text" class="form-control"
+                ng-model="place2.name" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="resLat" class="col-xs-2 control-label">Latitude</label>
+            <div class="col-xs-10">
+                <input name="resLat" type="number" class="form-control"
+                ng-model="place2.lat" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="resLng" class="col-xs-2 control-label">Longitude</label>
+            <div class="col-xs-10">
+                <input name="resLng" type="number" class="form-control"
+                ng-model="place2.lng" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-offset-2 col-xs-10">
+                <button class="btn btn-success"
+                ng-disabled="resForm.$invalid">Confirm</button>
+            </div>
+        </div>
+    </form>
 
     </div>
 </div>
