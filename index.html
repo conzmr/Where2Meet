@@ -77,5 +77,30 @@
     </div>
 </div>
 
+<div>
+
+  <div ng-app="Where2Meet" ng-controller="interfaceController">
+<p>Price:</p>
+<select>
+<option ng-repeat="x in price">{{x.display}}</option>
+</select>
+<br>
+<p>Place Type</p>
+<form name="placeTypeForm" ng-controller="interfaceController">
+  <label>l
+  <input type="checkbox" id="hola" value="hiii">
+  lll
+</label>
+<label ng-repeat="x in placeTypes track by $index">
+     <input type="checkbox" id="checkbox{{$index}}">
+     {{x.display}}
+     <br>
+ </label>
+
+ </form>
+ {{placesJSON | json}}
+</div>
+</div>
+
 </body>
 </html>

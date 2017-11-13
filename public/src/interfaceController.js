@@ -1,5 +1,7 @@
 var app = angular.module('Where2Meet', ['ngMaterial', 'gm']);
 
+
+
 app.service('Map', function($q) {
 
   this.markers=[];
@@ -166,7 +168,56 @@ app.service('Map', function($q) {
 
 });
 
-app.controller('interfaceController', function($scope, Map) {
+app.controller('interfaceController', function($scope, $http, Map) {
+
+  $scope.placeTypes = [
+  	{ value: 'art_gallery', display: 'Art Gallery'},
+    { value: 'bar', display: 'Bar'},
+    { value: 'bowling_alley', display: 'Bowling Alley'},
+    { value: 'cafe', display: 'Cafe'},
+    { value: 'gym', display: 'Gym'},
+    { value: 'library', display: 'Library'},
+    { value: 'movie_theater', display: 'Movie Theater'},
+    { value: 'museum', display: 'Museum'},
+    { value: 'park', display: 'Park'},
+    { value: 'restaurant', display: 'Restaurant'},
+    { value: 'shopping_mall', display: 'Shopping Mall'}
+
+  ];
+
+  $scope.price = [
+    { value: 0, display: 'Free'},
+    { value: 1, display: 'Affordable'},
+    { value: 2, display: 'In Between'},
+    { value: 3, display: 'Expensive'},
+    { value: 4, display: 'Fancy'}
+  ];
+
+  var radius = 1000;
+  var lat = 42.3675294;
+  var lon = -71.186966;
+  var key = 'AIzaSyAOy8I86u2ox0Gb5xt5GZ842r09yp_hDII';
+  var places = '';
+  var priceOpt = '';
+//getPlaces();
+var myElement = document.getElementById('checkbox1');
+//var myElement = angular.element(document.querySelector('hola'));
+console.log(myElement.value);
+
+  function getPlaces(){
+    angular.forEach($scope.placeTypes, function(value){
+      var myElement = angular.element(document.querySelector('art_gallery'));
+      console.log(myElement.value);
+
+    });
+
+    var placesUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?type=restaurant&location=42.3675294,-71.186966&radius=10000&key='+key;
+
+    $http.get(placesUrl).success(function (data){
+      $scope.placesJSON = data;
+    });
+
+  }
 
 $scope.gPlace;
 
