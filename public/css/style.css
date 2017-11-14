@@ -1,10 +1,41 @@
 @font-face{
-    font-family: 'Circular';
+    font-family: 'Open Sans', sans-serif;
 
 }
 
-body{
-    font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+#map {
+    height: 100vh;
+    width: 100%;
+    margin: 20px 0;
+    border-radius: 5px;
+    border: 1px solid silver;
+}
+
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.input-wrap {
+
+  position: relative;
+  width: auto;
+  height: auto;
+  max-width: 400px;
+}
+.logo-cont h4{
+  font-size: 25px;
+  font-weight: bold;
+  color: #25c2e1;
+  margin: auto;
+}
+
+.logo-cont img{
+  height: 30px;
+  margin: auto;
+}
+
+.myLocation{
+  vertical-align: middle;
 }
 
 .navbar-light{
@@ -14,7 +45,7 @@ body{
     padding-right: 10%;
 }
 .location-field{
-    margin-left: 20px;
+    margin: 5px 20px;
     background-color: #fff;
     border-color: transparent;
     -moz-box-shadow:    1px 1px 10px 1px rgba(122, 122, 122, 0.15);
@@ -33,7 +64,7 @@ body{
 }
 
 #location-field-b{
-    margin-left: 10px; 
+    
     width: 400px;
     height: 40px;
     background: url(../img/location-b.svg) no-repeat #fff 10px;
@@ -52,7 +83,7 @@ body{
     height: 40px;
     width: 140px;
     background-color: #25C2E1;
-    color: #fff; 
+    color: #fff;
     font-weight: bold;
     -moz-box-shadow:    1px 1px 10px 1px rgba(10, 123, 147, 0.15);
     -webkit-box-shadow: 1px 1px 10px 1px rgba(10, 123, 147, 0.15);
@@ -64,8 +95,12 @@ html, body, .map-canvas{
     width: 100%;
 }
 
+.nav-bar-sup{
+  padding: 30px 0 10px;
+}
+
 .footer{
-    background-color: #F7F7F7;
+    background-color: white;
 }
 
 .container{
@@ -74,13 +109,20 @@ html, body, .map-canvas{
     text-align: center;
 }
 
-.footer-logo{
-    width: 23%;
+.footer-logo img{
+      height: 50px;
+      margin-right: 5px;
+}
+
+.footer-logo h3{
+  font-size: 40px;
+  font-weight: bold;
+  color: #717171;
 }
 
 .footer-menu{
     text-align: center;
-    padding-top: 20px;  
+    padding-top: 20px;
     list-style-type: none;
     overflow: hidden;
     margin-left: 15%;
@@ -90,7 +132,7 @@ html, body, .map-canvas{
 
 .footer-menu li{
     float: left;
-    margin: 15px 15px 15px 15px; 
+    margin: 15px 15px 15px 15px;
 }
 
 .footer-menu li a{
@@ -106,7 +148,7 @@ html, body, .map-canvas{
 
 .copyright{
     font-size: 13px;
-    color: #C0C0C0;
+    color: #808080;
 }
 
 #red-heart{
