@@ -198,26 +198,39 @@ app.controller('interfaceController', function($scope, $http, Map) {
   var lon = -71.186966;
   var key = 'AIzaSyAOy8I86u2ox0Gb5xt5GZ842r09yp_hDII';
   var places = '';
-  var priceOpt = '';
+  var priceOpt = 0;
 
 
   function getPlaces(){
     angular.forEach($scope.placeTypes, function(value){
       var myElement = document.getElementById(value.value);
-      console.log(myElement.value);
-
+      if (myElement.checked == true){
+        places += myElement.value+'||'
+      }
     });
+    priceOpt = document.getElementById('selectF').value;
+    places = places.slice(0,-2);
 
-    var placesUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?type=restaurant&location=42.3675294,-71.186966&radius=10000&key='+key;
+priceOpt ='1';
+    var placesUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?type='+places+'&minprice=0&maxprice='+priceOpt+'&location='+lat+','+lon+'&oppennow&radius='+radius+'&key='+key;
 
     $http.get(placesUrl).success(function (data){
-      $scope.placesJSON = data;
+      $scope.placesJSON = data.results;
+      console.log(data.results);
     });
+
+  //  $scope.placesJSON = JSON.parse($scope.placesJSON);
+
+    console.log($scope.placesJSON);
 
   }
 
-  angular.element(document).ready(function () {
+  $scope.submit = function() {
         getPlaces();
+  };
+
+  angular.element(document).ready(function () {
+        //getPlaces();
     });
 
 $scope.gPlace;
