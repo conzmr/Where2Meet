@@ -92,7 +92,7 @@
   lll
 </label>
 <label ng-repeat="x in placeTypes track by $index">
-     <input type="checkbox" id="checkbox{{$index}}">
+     <input type="checkbox" id="{{x.value}}" value="{{x.value}}">
      {{x.display}}
      <br>
  </label>
@@ -101,6 +101,5 @@
  {{placesJSON | json}}
 </div>
 </div>
-
 </body>
 </html>

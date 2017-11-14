@@ -199,14 +199,11 @@ app.controller('interfaceController', function($scope, $http, Map) {
   var key = 'AIzaSyAOy8I86u2ox0Gb5xt5GZ842r09yp_hDII';
   var places = '';
   var priceOpt = '';
-//getPlaces();
-var myElement = document.getElementById('checkbox1');
-//var myElement = angular.element(document.querySelector('hola'));
-console.log(myElement.value);
+
 
   function getPlaces(){
     angular.forEach($scope.placeTypes, function(value){
-      var myElement = angular.element(document.querySelector('art_gallery'));
+      var myElement = document.getElementById(value.value);
       console.log(myElement.value);
 
     });
@@ -218,6 +215,10 @@ console.log(myElement.value);
     });
 
   }
+
+  angular.element(document).ready(function () {
+        getPlaces();
+    });
 
 $scope.gPlace;
 
