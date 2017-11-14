@@ -76,6 +76,7 @@ app.controller('mainCtrl', function($scope, Map) {
   var totalTime = 0;
 
   polyline.GetPointAtDistance = function(metres) {
+    // some awkward special cases
     if (metres == 0) return this.getPath().getAt(0);
     if (metres < 0) return null;
     if (polyline.getPath().getLength() < 2) return null;
