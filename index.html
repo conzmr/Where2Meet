@@ -13,10 +13,10 @@
     <link href="/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
     <script src="/bower_components/angular/angular.min.js"></script>
+      <script src="/bower_components/angular-material/angular-material.min.js"></script>
     <script src="/bower_components/angular-messages/angular-messages.min.js"></script>
     <script src="/bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="/bower_components/angular-aria/angular-aria.min.js"></script>
-    <script src="/bower_components/angular-material/angular-material.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgGMmMMK4kdUsLnKp0McDlwlBU1sD_sL4&libraries=places"></script>
     <script src="http://jvandemo.github.io/angularjs-google-maps/dist/angularjs-google-maps.js"></script>
     <script src="/js/w2m-v3/v3_epoly.js"></script>
@@ -38,7 +38,29 @@
             <input googleplace class="form-control mr-sm-2 location-field" ng-submit="search(locationOne)" id="location-field-a" type="text" placeholder="Ingresa la primera ubicación" ng-model="locationOne" aria-label="Search">
           <input googleplace class="form-control mr-sm-2 location-field"  id="location-field-b" type="text" placeholder="Ingresa la segunda ubicación" ng-model="locationTwo" aria-label="Search">
             <button class="btn btn-custom my-2 my-sm-0" type="custom" ng-click="getCurrentlocation()">  <i class="material-icons myLocation">my_location</i></button>
-          <button class="btn btn-custom my-2 my-sm-0" type="custom"><i class="fa fa-sliders" aria-hidden="true"></i></button>
+
+        
+                   <md-menu-bar>
+            <md-menu>
+          <button class="btn btn-custom my-2 my-sm-0" type="custom" ng-click="$mdMenu.open()"><i class="fa fa-sliders" aria-hidden="true"></i></button>
+          <md-menu-content>
+              <md-menu-item type="checkbox" ng-model="settings.printLayout">Print layout</md-menu-item>
+              <md-menu-item class="md-indent">
+                <md-menu>
+                  <md-button ng-click="$mdMenu.open()">Mode</md-button>
+                  <md-menu-content width="3">
+                    <md-menu-item type="radio" ng-model="settings.presentationMode" value="'presentation'">Presentation</md-menu-item>
+                    <md-menu-item type="radio" ng-model="settings.presentationMode" value="'edit'">Edit</md-menu-item>
+                    <md-menu-item type="radio" ng-model="settings.presentationMode" value="'modifiable'">Modifiable</md-menu-item>
+                  </md-menu-content>
+                </md-menu>
+              </md-menu-item>
+              <md-menu-divider></md-menu-divider>
+              <md-menu-item type="checkbox" ng-model="settings.showRuler">Show ruler</md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </md-menu-bar>
+
           <button class="btn btn-search my-2 my-sm-0" ng-click="calcRoute()" type="submit">Buscar</button>
           </div>
         </div>

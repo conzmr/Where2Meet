@@ -62,7 +62,23 @@ app.service('Map', function($q) {
     }
 });
 
-app.controller('mainCtrl', function($scope, Map) {
+app.controller('mainCtrl', function($scope, Map, $mdMenu, $mdDialog) {
+
+  $scope.settings = {
+     printLayout: true,
+     showRuler: true,
+     showSpellingSuggestions: true,
+     presentationMode: 'edit'
+   };
+
+   $scope.sampleAction = function(name, ev) {
+      $mdDialog.show($mdDialog.alert()
+        .title(name)
+        .textContent('You triggered the "' + name + '" action')
+        .ok('Great')
+        .targetEvent(ev)
+      );
+    };
 
   var directionsDisplay = new google.maps.DirectionsRenderer();
   var directionsService = new google.maps.DirectionsService();
