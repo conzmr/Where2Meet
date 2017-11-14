@@ -1,81 +1,100 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="apple-touch-icon" href="slaves.png">
+    <link rel="apple-touch-icon" href="/img/logo-w2m.svg">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-startup-image" href="img/w2m.jpg">
-    <link rel="shortcut icon" type="image/png" href="img/w2m.jpg">
+    <link rel="apple-touch-startup-image" href="/img/w2m-icon.png">
+    <link rel="shortcut icon" type="image/png" href="/img/w2m-icon.png">
+    <script src="https://use.fontawesome.com/93e1c5a9f2.js"></script>
     <title>Where2Meet</title>
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
-  <link href="src/styles.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgGMmMMK4kdUsLnKp0McDlwlBU1sD_sL4&libraries=places"></script>
-  <script src="http://jvandemo.github.io/angularjs-google-maps/dist/angularjs-google-maps.js"></script>
-  <script src="src/mainController.js"></script>
-  <script src="src/interfaceController.js"></script>
-</head>
-<body ng-app="Where2Meet" ng-cloak>
-  <div  class="container"  ng-controller="interfaceController" >
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script src="/bower_components/angular-messages/angular-messages.min.js"></script>
+    <script src="/bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="/bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="/bower_components/angular-material/angular-material.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgGMmMMK4kdUsLnKp0McDlwlBU1sD_sL4&libraries=places"></script>
+    <script src="http://jvandemo.github.io/angularjs-google-maps/dist/angularjs-google-maps.js"></script>
+    <script src="src/mainController.js"></script>
+  </head>
 
-    <h2>Where2Meet</h2>
-<!--
-    <h3 class="clearfix">
-        <img class="pull-left" src="img/w2m.jpg"/>
-        <img class="pull-right" src="http://upload.wikimedia.org/wikipedia/commons/9/9a/Google_maps_logo.png"/>
-    </h3> -->
-
-    <md-input-container md-no-float class="md-block">
-      <input name="place" type="text" class="form-control"
-      ng-model="locationOne" required autofocus googleplace aria-label="locationOneSearch"/>
-     <md-icon style="display:inline-block;"><i class="material-icons">my_location</i></md-icon>
-   </md-input-container>
-   <md-input-container md-no-float class="md-block">
-     <input name="place" type="text" class="form-control"
-      ng-model="locationTwo" required autofocus googleplace aria-label="locationOneSearch"/>
-  </md-input-container>
-
-    <div id="map"></div>
-
-    <!-- <form name="resForm" class="form-horizontal" novalidate
-    ng-submit="send()">
-        <div class="form-group">
-            <label for="resName" class="col-xs-2 control-label">Name</label>
-            <div class="col-xs-10">
-                <input name="resName" type="text" class="form-control"
-                ng-model="place.name" required />
-            </div>
+  <body ng-app="Where2Meet" ng-cloak>
+    <div  ng-controller="mainCtrl">
+      <div layout="row" flex layout-align="center" class="nav-bar-sup" layout-wrap>
+        <div flex="90" layout="row" layout-align="center" layout-wrap>
+          <div class="logo-cont" layout="row" layout-align="start">
+            <h4>Where2Mee</h4>
+            <img src="/img/logo-w2m.svg" alt="Where2Meet">
+          </div>
+            <input googleplace class="form-control mr-sm-2 location-field" ng-submit="search(locationOne)" id="location-field-a" type="text" placeholder="Ingresa la primera ubicación" ng-model="locationOne" aria-label="Search">
+          <input googleplace class="form-control mr-sm-2 location-field"  id="location-field-b" type="text" placeholder="Ingresa la segunda ubicación" ng-model="locationTwo" aria-label="Search">
+            <button class="btn btn-custom my-2 my-sm-0" type="custom" ng-click="getCurrentlocation()">  <i class="material-icons myLocation">my_location</i></button>
+          <button class="btn btn-custom my-2 my-sm-0" type="custom"><i class="fa fa-sliders" aria-hidden="true"></i></button>
+          <button class="btn btn-search my-2 my-sm-0" ng-click="search(locationTwo)" type="submit">Buscar</button>
+          </div>
         </div>
-        <div class="form-group">
-            <label for="resLat" class="col-xs-2 control-label">Latitude</label>
-            <div class="col-xs-10">
-                <input name="resLat" type="number" class="form-control"
-                ng-model="place.lat" required />
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="resLng" class="col-xs-2 control-label">Longitude</label>
-            <div class="col-xs-10">
-                <input name="resLng" type="number" class="form-control"
-                ng-model="place.lng" required />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-xs-offset-2 col-xs-10">
-                <button class="btn btn-success"
-                ng-disabled="resForm.$invalid">Confirm</button>
-            </div>
-        </div>
-    </form> -->
 
+      </div>
+      <md-progress-linear ng-if="loading" md-mode="indeterminate" flex></md-progress-linear>
+    <!-- <nav class="navbar navbar-expand-md navbar-light fixed-top" layout="row" flex layout-align="center" >
+      <a class="navbar-brand" href="#">
+          <img src="/img/logo-w2m.svg" width="45" height="45" alt="">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <input googleplace class="form-control mr-sm-2 location-field" ng-submit="search(locationOne)" id="location-field-a" type="text" placeholder="Ingresa tu ubicación" ng-model="locationOne" aria-label="Search">
+            <input googleplace class="form-control mr-sm-2 location-field"  id="location-field-b" type="text" placeholder="Ingresa la segunda ubicación" ng-model="locationTwo" aria-label="Search">
+            <a href="#">
+              <button class="btn btn-custom my-2 my-sm-0" type="custom"><i class="fa fa-sliders" aria-hidden="true"></i></button>
+            </a>
+            <a href="#">
+              <button class="btn btn-search my-2 my-sm-0" ng-click="search(locationTwo)" type="submit">Buscar</button>
+            </a>
+      </div>
+    </nav> -->
+
+      <div id="map" flex layout="column" class="map-canvas" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></div>
+
+
+    <div class="footer">
+        <footer class="container">
+
+            <div layout="row" flex layout-align="center" class="footer-logo">
+              <img src="/img/logo-w2m.svg">
+              <h3>Where2Meet</h3>
+            </div>
+            <p>
+              <ul class="footer-menu" layout="row" flex layout-align="center" >
+                <li><a href="">Acerca</a></li>
+                <li><a href="">Blog</a></li>
+                <li><a href="">Ayuda</a></li>
+                <li><a href="">Carreras</a></li>
+                <li><a href="">Privacidad</a></li>
+                <li><a href="">Términos</a></li>
+              </ul>
+            <p>
+              <p class="copyright">
+                Where2Meet &copy; 2017. Hecho con <i class="fa fa-heart" id="red-heart" aria-hidden="true"></i> en Guadalajara.
+              </p>
+          </footer>
     </div>
-</div>
+      </div>
 
-</body>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
 </html>
