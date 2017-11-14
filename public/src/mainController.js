@@ -1,8 +1,10 @@
-var app = angular.module('Where2Meet', ['ngMaterial', 'gm']);
+var app = angular.module('Where2Meet', ['ngMaterial', 'gm', 'checklist-model']);
 
 app.service('Map', function($q) {
-
+var infowindow = new google.maps.InfoWindow();
   this.markers=[];
+  this.resultsCounter = 0;
+  this.resultsMarkers = [];
   this.counter = 0;
   var geocoder = new google.maps.Geocoder;
   var posImgs = ['/img/location-a.png', '/img/location-b.png'];
@@ -48,6 +50,24 @@ app.service('Map', function($q) {
         this.counter++;
     }
 
+    this.addPlace = function(res) {
+      var marker = this.resultsMarkers[this.resultsCounter];
+        marker = new google.maps.Marker({
+            map: this.map,
+            position: res.geometry.location,
+            animation: google.maps.Animation.DROP,
+            title: res.name
+        });
+        marker.myname = res.name;
+    google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(res.name+"<br>"+res.vicinity);
+        infowindow.open(Map.map,marker);
+        });
+        this.resultsCounter++;
+    return marker;
+
+    }
+
     this.searchGivenPos = function(position) {
       console.log(position);
       var d = $q.defer();
@@ -62,13 +82,110 @@ app.service('Map', function($q) {
     }
 });
 
-app.controller('mainCtrl', function($scope, Map, $mdMenu, $mdDialog) {
+
+app.controller('mainCtrl', function($scope, Map, $mdMenu, $mdDialog,  $timeout,$mdSidenav) {
+
+  var midpoint;
+  $scope.placesResults = [];
+
+  $scope.categories = [
+    { value: 'art_gallery', display: 'Galería de arte'},
+    { value: 'bar', display: 'Bar'},
+    { value: 'bowling_alley', display: 'Bolerama'},
+    { value: 'cafe', display: 'Café'},
+    { value: 'gym', display: 'Gimnasio'},
+    { value: 'library', display: 'Librería'},
+    { value: 'movie_theater', display: 'Cine'},
+    { value: 'museum', display: 'Museo'},
+    { value: 'park', display: 'Parque'},
+    { value: 'restaurant', display: 'Restaurante'},
+    { value: 'shopping_mall', display: 'Centro comercial'}
+   ];
+
+   $scope.toggleLeft = buildToggler('left');
+   $scope.toggleRight = buildToggler('right');
+
+   function buildToggler(componentId) {
+     return function() {
+       $mdSidenav(componentId).toggle();
+     };
+   }
+
+ $scope.printSelection = function(item){
+   console.log(item)
+   console.log($scope.settings.placeTypeSelection.categories)
+ }
+
+  $scope.addIntoPlaces = function(place){
+    $scope.selectedPlaceTypes.push(place);
+    console.log($scope.selectedPlaceTypes)
+    console.log($scope.settings.placeTypeSelection.categories);
+  }
+
+  $scope.price = [
+    { value: 0, display: 'Gratis'},
+    { value: 1, display: 'Accesible'},
+    { value: 2, display: 'Regular'},
+    { value: 3, display: 'Costoso'},
+    { value: 4, display: 'Elegante'}
+  ];
+
+  var radius = 1000;
+  var lat = 42.3675294;
+  var lon = -71.186966;
+  var key = 'AIzaSyAOy8I86u2ox0Gb5xt5GZ842r09yp_hDII';
+  var places = '';
+  var priceOpt = '';
+
+  function getPlaces(){
+    angular.forEach($scope.placeTypes, function(value){
+      var myElement = angular.element(document.querySelector('art_gallery'));
+      console.log(myElement.value);
+
+    });
+
+    var placesUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?type=restaurant&location=42.3675294,-71.186966&radius=10000&key='+key;
+
+    $http.get(placesUrl).success(function (data){
+      $scope.placesJSON = data;
+    });
+
+  }
+
+
+  function findPlaces(marker){
+    $scope.loading = true;
+    var placesService = new google.maps.places.PlacesService(Map.map);
+        placesService.nearbySearch({
+          location: marker,
+          radius: 1000,
+          types: $scope.settings.placeTypeSelection.categories,
+          maxPriceLevel: $scope.settings.typeOfPrice
+        }, callback);
+
+        function callback(results, status) {
+          $scope.loading = false;
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          $scope.$apply(function () {
+            $scope.placesResults = results;
+        });
+          for (var i = 0; i < results.length; i++) {
+            Map.addPlace(results[i]);
+            console.log(results[i]);
+          }
+        }
+      }
+  }
 
   $scope.settings = {
+    typeOfPrice: [],
      printLayout: true,
      showRuler: true,
      showSpellingSuggestions: true,
-     presentationMode: 'edit'
+     presentationMode: 'edit',
+     placeTypeSelection : {
+     categories: []
+   }
    };
 
    $scope.sampleAction = function(name, ev) {
@@ -92,7 +209,6 @@ app.controller('mainCtrl', function($scope, Map, $mdMenu, $mdDialog) {
   var totalTime = 0;
 
   polyline.GetPointAtDistance = function(metres) {
-    // some awkward special cases
     if (metres == 0) return this.getPath().getAt(0);
     if (metres < 0) return null;
     if (polyline.getPath().getLength() < 2) return null;
@@ -127,18 +243,11 @@ app.controller('mainCtrl', function($scope, Map, $mdMenu, $mdDialog) {
                 Map.addMarker(res);
                 switch (tempCounter%2) {
                   case 0:
-                  console.log("cas1")
-
                     $scope.locationOne = res.formatted_address;
-
-                  console.log("jejis" + $scope.locationOne)
                     break;
 
                   case 1:
-
                     $scope.locationTwo = res.formatted_address;
-
-                  console.log("jeje" + $scope.locationTwo)
                     break;
                 }
             },
@@ -231,12 +340,8 @@ totalDist = totalDist / 1000.
 function putMarkerOnRoute(percentage) {
   var distance = (percentage/100) * totalDist;
   var time = ((percentage/100) * totalTime/60).toFixed(2);
-  if (!marker) {
-    marker = createMarker(polyline.GetPointAtDistance(distance),"time: "+time,"marker");
-  } else {
-    marker.setPosition(polyline.GetPointAtDistance(distance));
-    marker.setTitle("time:"+time);
-  }
+  midpoint = polyline.GetPointAtDistance(distance);
+  findPlaces(midpoint);
 }
 
 function createMarker(latlng, label, html) {
@@ -254,9 +359,7 @@ function createMarker(latlng, label, html) {
         infowindow.open(Map.map,marker);
         });
     return marker;
-}
-
-});
+}});
 
 app.directive('googleplace', function(Map) {
     return {
@@ -267,13 +370,10 @@ app.directive('googleplace', function(Map) {
                 componentRestrictions: {country: 'mx'}
             };
             scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
-            console.log(element[0]);
             google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
               scope.loading = true;
                 scope.$apply(function() {
-                  console.log(element)
                   scope.loading = false;
-
                     model.$setViewValue(element.val());
                     scope.search(element.val());
                 });
