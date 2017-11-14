@@ -216,13 +216,18 @@ priceOpt ='1';
 
     $http.get(placesUrl).success(function (data){
       $scope.placesJSON = data.results;
-      console.log(data.results);
-    });
 
-  //  $scope.placesJSON = JSON.parse($scope.placesJSON);
+      angular.forEach(data.results, function(value){
+          setMarker(value.name, value.geometry.location.lat, value.geometry.location.lng);
+        });
+      });
+      //console.log(data.results);
+    //console.log($scope.placesJSON);
 
-    console.log($scope.placesJSON);
+  }
 
+  function setMarker(name, lat, lng){
+    console.log(name);
   }
 
   $scope.submit = function() {
