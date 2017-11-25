@@ -158,7 +158,7 @@ app.controller('mainCtrl', function($scope, Map, $mdMenu, $mdDialog,  $timeout,$
     var placesService = new google.maps.places.PlacesService(Map.map);
         placesService.nearbySearch({
           location: marker,
-          radius: 1000,
+          radius: 5000,
           types: $scope.settings.placeTypeSelection.categories,
           maxPriceLevel: $scope.settings.typeOfPrice
         }, callback);
